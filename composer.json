@@ -1,0 +1,20 @@
+{
+    "name": "jeanp/jexport",
+    "description": "library generate excel reports",
+    "type": "library",
+    "require": {
+        "rap2hpoutre/fast-excel": "^5.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jeanp\\JExport\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jean Pier",
+            "email": "jeanpier.23.26@gmail.com"
+        }
+    ]
+}
