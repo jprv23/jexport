@@ -2,7 +2,8 @@
 
 namespace Jeanp\JExport;
 
-use App\Jobs\JExportJob;
+use Jeanp\JExport\Jobs\JExportJob;
+use Jeanp\JExport\JQueue;
 use App\Models\Export;
 
 class JExport{
