@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Jeanp\JExport\app\Console\Commands;
 
 use App\Models\Colaborador;
 use App\Models\Setting;

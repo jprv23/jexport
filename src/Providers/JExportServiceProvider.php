@@ -1,6 +1,6 @@
 <?php
 
-namespace Jeanp\Jexcel\Providers;
+namespace Jeanp\JExport\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
