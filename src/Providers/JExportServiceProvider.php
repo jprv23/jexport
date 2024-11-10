@@ -3,8 +3,8 @@
 namespace Jeanp\JExport\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
-class PHPExcelMacroServiceProvider extends ServiceProvider
+use Jeanp\JExport\app\Console\Commands\JExportCommand;
+class JExportServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -25,7 +25,7 @@ class PHPExcelMacroServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                MiComando::class,
+                JExportCommand::class,
             ]);
         }
     }
