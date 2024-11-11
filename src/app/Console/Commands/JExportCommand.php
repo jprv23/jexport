@@ -46,9 +46,9 @@ class JExportCommand extends Command
         $contenido = "<?php\n\nnamespace " . $this->obtenerNamespace($ruta) . ";\n\n";
         $contenido .= "class {$name}\n{\n";
         $contenido .= "    public function query("."$"."start_date, "."$"."end_date)\n    {\n";
-        $contenido .= "        // Realizar la consulta deseada\n\n";
+        $contenido .= "        // Realizar la consulta deseada\n";
         $contenido .= "        "."$"."data = [];\n\n";
-        $contenido .= "        return "."$"."data;\n";
+        $contenido .= "        return "."$"."data;//Retornar la colección de datos\n";
         $contenido .= "    }\n";
         $contenido .= "}\n";
 
