@@ -19,7 +19,7 @@ class JExportCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'jexport:init';
+    protected $signature = 'make:jexport {name}';
 
     /**
      * The console command description.
@@ -34,17 +34,17 @@ class JExportCommand extends Command
     public function handle()
     {
 
-        $paquete = 'jexport';
-        $origen = base_path("vendor/{$paquete}/database/migrations");
-        $destino = database_path('migrations');
+        // $paquete = 'jexport';
+        // $origen = base_path("vendor/{$paquete}/database/migrations");
+        // $destino = database_path('migrations');
 
-        if (!File::exists($origen)) {
-            $this->error("El paquete {$paquete} no tiene una carpeta de migraciones en {$origen}");
-            return;
-        }
+        // if (!File::exists($origen)) {
+        //     $this->error("El paquete {$paquete} no tiene una carpeta de migraciones en {$origen}");
+        //     return;
+        // }
 
-        File::copyDirectory($origen, $destino);
+        // File::copyDirectory($origen, $destino);
 
-        $this->info("Migraciones copiadas de {$paquete} a la carpeta de migraciones del proyecto.");
+        // $this->info("Migraciones copiadas de {$paquete} a la carpeta de migraciones del proyecto.");
     }
 }

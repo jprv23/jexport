@@ -23,6 +23,12 @@ class JExportServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        $this->publishes([
+            __DIR__.'/../config/jexport.php' => config_path('jexport.php'),
+        ], 'config');
+
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 JExportCommand::class,
