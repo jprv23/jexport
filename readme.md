@@ -37,6 +37,7 @@ Se crearán los siguientes archivos en tu proyecto:
 - database/migrations/create_exports_table.php
 
 #### Paso 4: Ejecutar migración
+Esto creará una tabla llamada 'exports' en nuestra base de datos, la cuál tendrá el historial de todas las exportaciones realizadas.
 ```bash
 php artisan migrate
 ```

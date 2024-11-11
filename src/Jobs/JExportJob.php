@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Throwable;
 
@@ -53,6 +53,13 @@ class JExportJob implements ShouldQueue
 
         //Ejectutar exportación con la data
         $path = storage_path("app/{$this->disk}/{$export->file_path}");
+
+        //Verificar si el directorio existe, sino crearlo
+        $directory = dirname($path);
+        if (!File::exists($directory)) {
+            // Crear el directorio si no existe
+            File::makeDirectory($directory, 0755, true);
+        }
 
         (new FastExcel($data))->export($path);
 
