@@ -31,7 +31,7 @@ class JExportJob implements ShouldQueue
      */
     public function handle(): void
     {
-        ini_set('memory_limit', '4072M');
+        ini_set('memory_limit', config('jexport.memory_limit'));
 
         $export = Export::find($this->exportId);
         $export->progress=20;

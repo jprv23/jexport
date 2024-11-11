@@ -8,12 +8,14 @@ use App\Models\Export;
 
 class JExport{
 
-    public static $disk = 'public';
-    public static $directory = 'exports';
-    public static $queue = 'exports';
+    public static $disk;
+    public static $directory;
+    public static $queue;
 
 
     public static function dispatch($namespace, $args = [], $queue = null){
+
+        self::init();
 
         $file_name= date('YmdHis') . ".xlsx";
         $file_path= self::$directory ."/{$file_name}";
@@ -38,6 +40,12 @@ class JExport{
         dispatch(new JExportJob($namespace, $args, $export->id, self::$disk))->onQueue(self::$queue);
 
         return $export;
+    }
+
+    private static function init(){
+        self::$disk = config('jexport.disk');
+        self::$directory = config('jexport.directory');
+        self::$queue = config('jexport.queue');
     }
 
 

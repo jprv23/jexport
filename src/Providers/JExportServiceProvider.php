@@ -26,7 +26,7 @@ class JExportServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/jexport.php' => config_path('jexport.php'),
-            __DIR__.'/../database/migrations/create_exports_table.php' => database_path(date('Y_m_d_His') . '_create_exports_table'),
+            __DIR__.'/../database/migrations/create_exports_table.php' => database_path('migrations/'.date('Y_m_d_His') . '_create_exports_table.php'),
             __DIR__.'/../app/Models/Export.php' => app_path('Models/Export.php'),
         ], 'jexport');
 

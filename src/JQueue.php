@@ -4,9 +4,6 @@ namespace Jeanp\JExport;
 
 class JQueue
 {
-
-    protected $php = 'ea-php81';
-
     protected function php_path()
     {
         $host = request()->getHost();
@@ -14,7 +11,7 @@ class JQueue
             return 'php';
         }
 
-        return '/usr/local/bin/' .  $this->php;
+        return '/usr/local/bin/' .  config('jexport.php', 'ea-php81');
     }
 
     public function start($queues = [])
