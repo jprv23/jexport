@@ -1,6 +1,6 @@
 {
     "name": "jeanp/jexport",
-    "description": "library generate excel reports",
+    "description": "Biblioteca para generar reportes en excel en segundo plano",
     "type": "library",
     "require": {
         "rap2hpoutre/fast-excel": "^5.5"
