@@ -2,16 +2,8 @@
 
 namespace Jeanp\JExport\app\Console\Commands;
 
-use App\Models\Colaborador;
-use App\Models\Setting;
-use App\Models\Subscription;
-use App\Models\SubscriptionStatus;
-use App\Services\SenatiService;
-use App\Services\ZohoService;
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\File;
 class JExportCommand extends Command
 {
     /**
@@ -26,25 +18,52 @@ class JExportCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Comando para copiar migración, modelo';
+    protected $description = 'Crea un archivo base para exportación';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
+        $name = $this->argument('name');
+        $ruta = app_path('Exports');
 
-        // $paquete = 'jexport';
-        // $origen = base_path("vendor/{$paquete}/database/migrations");
-        // $destino = database_path('migrations');
+        // Asegúrate de que la carpeta de destino existe
+        if (!File::exists($ruta)) {
+            File::makeDirectory($ruta, 0755, true);
+        }
 
-        // if (!File::exists($origen)) {
-        //     $this->error("El paquete {$paquete} no tiene una carpeta de migraciones en {$origen}");
-        //     return;
-        // }
+        // Crear la ruta completa del archivo
+        $archivo = "{$ruta}/{$name}.php";
 
-        // File::copyDirectory($origen, $destino);
+        // Verificar si el archivo ya existe
+        if (File::exists($archivo)) {
+            $this->error("El archivo {$archivo} ya existe.");
+            return;
+        }
 
-        // $this->info("Migraciones copiadas de {$paquete} a la carpeta de migraciones del proyecto.");
+        // Generar el contenido de la clase
+        $contenido = "<?php\n\nnamespace " . $this->obtenerNamespace($ruta) . ";\n\n";
+        $contenido .= "class {$name}\n{\n";
+        $contenido .= "    public function query("."$"."start_date, "."$"."end_date)\n    {\n";
+        $contenido .= "        // Realizar la consulta deseada\n\n";
+        $contenido .= "        "."$"."data = [];\n\n";
+        $contenido .= "        return "."$"."data;\n";
+        $contenido .= "    }\n";
+        $contenido .= "}\n";
+
+        // Crear el archivo con el contenido
+        File::put($archivo, $contenido);
+
+        $this->info("La clase {$name} se ha creado exitosamente en {$archivo}.");
+    }
+
+    private function obtenerNamespace($ruta)
+    {
+        // Convertir la ruta a namespace (por ejemplo, "app/Models" => "App\Models")
+        $namespace = str_replace(base_path(), '', $ruta);
+        $namespace = trim(str_replace('/', '\\', $namespace), '\\');
+        $namespace = ucfirst($namespace); // Capitalizar la primera letra
+        return $namespace;
     }
 }
