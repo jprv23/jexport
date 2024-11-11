@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace Jeanp\JExport\Jobs;
 
 use App\Models\Export;
 use Illuminate\Bus\Queueable;
