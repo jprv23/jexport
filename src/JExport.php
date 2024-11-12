@@ -5,6 +5,8 @@ namespace Jeanp\JExport;
 use Jeanp\JExport\Jobs\JExportJob;
 use Jeanp\JExport\JQueue;
 use App\Models\Export;
+use Illuminate\Support\Facades\Route;
+use Jeanp\JExport\app\Http\Controllers\JExportController;
 
 class JExport{
 
@@ -12,6 +14,11 @@ class JExport{
     public static $directory;
     public static $queue;
 
+    private static function init(){
+        self::$disk = config('jexport.disk');
+        self::$directory = config('jexport.directory');
+        self::$queue = config('jexport.queue');
+    }
 
     public static function dispatch($name = '', $namespace, $args = [], $queue = null){
 
@@ -43,12 +50,13 @@ class JExport{
         return $export;
     }
 
-    private static function init(){
-        self::$disk = config('jexport.disk');
-        self::$directory = config('jexport.directory');
-        self::$queue = config('jexport.queue');
+    public static function routes(){
+        Route::prefix('jexport')->as('jexport.')->controller(JExportController::class)->group(function () {
+            Route::get('', 'index')->name('index');
+            Route::post('flush', 'flush')->name('flush');
+            Route::delete('{id}', 'destroy')->name('destroy');
+        });
     }
-
 
 
 }

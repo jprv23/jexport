@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Export extends Model
 {
     use HasFactory;
+
+    public static function active(){
+        return self::where('status', true);
+    }
 }

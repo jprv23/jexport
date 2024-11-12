@@ -7,5 +7,6 @@ return [
     'directory' => env('JEXPORT_DIRECTORY', 'exports'),
     'queue' => env('JEXPORT_QUEUE', 'exports'),
     'memory_limit' => env('JEXPORT_MEMORY_LIMIT', '4072M'),
+    'view_title' => 'Reportes Generados',
 
 ];
