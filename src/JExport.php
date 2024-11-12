@@ -24,7 +24,7 @@ class JExport{
 
         self::init();
 
-        $file_name= date('YmdHis') . ".xlsx";
+        $file_name= self::getFilenameSanitaze($name) . "_" . date('YmdHis') . ".xlsx";
         $file_path= self::$directory ."/{$file_name}";
 
 
@@ -58,5 +58,13 @@ class JExport{
         });
     }
 
+    private static function getFilenameSanitaze($name) {
+        $name = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
+        $name = preg_replace('/[^a-zA-Z0-9-_.]/', '_', $name);
+        $name = strtolower($name);
+        $name = substr($name, 0, 200);
+
+        return $name;
+    }
 
 }

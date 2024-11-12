@@ -11,9 +11,16 @@ class JExportController extends Controller
 {
     public function index()
     {
+        if(!request()->ajax()){
+            return view('jexport.index');
+        }
+
         $exports = Export::active()->orderByDesc('id')->paginate(25);
 
-        return view('jexport.index', compact('exports'));
+        return response()->json([
+            'table' => view('jexport.table', compact('exports'))->render(),
+            'loading' => $exports->where('progress', '<', 100)->count() > 0,
+        ]);
     }
 
     public function destroy($id)
