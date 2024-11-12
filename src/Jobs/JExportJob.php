@@ -48,6 +48,7 @@ class JExportJob implements ShouldQueue
             return;
         }
 
+        $export->rows_total = $data->count();
         $export->progress=50;
         $export->save();
 
