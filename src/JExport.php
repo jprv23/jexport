@@ -13,7 +13,7 @@ class JExport{
     public static $queue;
 
 
-    public static function dispatch($namespace, $args = [], $queue = null){
+    public static function dispatch($name = '', $namespace, $args = [], $queue = null){
 
         self::init();
 
@@ -22,6 +22,7 @@ class JExport{
 
 
         $export = new Export();
+        $export->name = $name;
         $export->file_name = $file_name;
         $export->file_path = $file_path;
         $export->progress = 0;

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('exports', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
             $table->string('file_name');
             $table->string('file_path')->nullable();
             $table->integer('rows_total')->default(0);
