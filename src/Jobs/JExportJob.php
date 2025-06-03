@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class JExportJob implements ShouldQueue
@@ -24,6 +25,7 @@ class JExportJob implements ShouldQueue
         public array $args = [],
         public int $exportId,
         public string $disk = 'public',
+        public string $driver = 'fastexcel',
     ){}
 
     /**
@@ -62,7 +64,12 @@ class JExportJob implements ShouldQueue
             File::makeDirectory($directory, 0755, true);
         }
 
-        (new FastExcel($data))->export($path);
+        if(self::$driver == 'fastexcel'){
+            (new FastExcel($data))->export($path);
+        }else{
+            $className = $this->namescape;
+            Excel::store(new $className, $export->file_path, $this->disk);
+        }
 
         $export->progress=100;
         $export->finished= 1;

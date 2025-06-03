@@ -14,6 +14,7 @@ class JExport{
     public static $directory;
     public static $queue;
     public static $userId;
+    public static $driver = 'fastexcel';
 
     private static function init(){
         self::$disk = config('jexport.disk');
@@ -23,6 +24,11 @@ class JExport{
 
     public static function setUserId($id){
         self::$userId = $id;
+        return new self;
+    }
+
+    public static function setDriver($driver){
+        self::$driver = $driver;
         return new self;
     }
 
