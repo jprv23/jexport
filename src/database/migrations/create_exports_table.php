@@ -20,8 +20,11 @@ return new class extends Migration
             $table->decimal('progress')->default(0);
             $table->integer('finished')->default(0);
             $table->text('error_message')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

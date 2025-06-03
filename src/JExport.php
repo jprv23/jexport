@@ -13,11 +13,17 @@ class JExport{
     public static $disk;
     public static $directory;
     public static $queue;
+    public static $userId;
 
     private static function init(){
         self::$disk = config('jexport.disk');
         self::$directory = config('jexport.directory');
         self::$queue = config('jexport.queue');
+    }
+
+    public static function setUserId($id){
+        self::$userId = $id;
+        return new self;
     }
 
     public static function dispatch($name = '', $namespace, $args = [], $queue = null){
@@ -33,6 +39,11 @@ class JExport{
         $export->file_name = $file_name;
         $export->file_path = $file_path;
         $export->progress = 0;
+
+        if(self::$userId){
+            $export->user_id = self::$userId;
+        }
+
         $export->save();
 
 

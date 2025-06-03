@@ -15,7 +15,7 @@ class JExportController extends Controller
             return view('jexport.index');
         }
 
-        $exports = Export::active()->orderByDesc('id')->paginate(25);
+        $exports = Export::active()->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate(25);
 
         return response()->json([
             'table' => view('jexport.table', compact('exports'))->render(),
