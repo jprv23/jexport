@@ -64,7 +64,7 @@ class JExportJob implements ShouldQueue
             File::makeDirectory($directory, 0755, true);
         }
 
-        if(self::$driver == 'fastexcel'){
+        if($this->driver == 'fastexcel'){
             (new FastExcel($data))->export($path);
         }else{
             $className = $this->namescape;
