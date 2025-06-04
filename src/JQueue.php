@@ -28,7 +28,7 @@ class JQueue
         foreach ($queues as $key => $queue) {
             $status_queue = $this->cmd_is_queue($queue);
             if (!$status_queue) {
-                $array_cmd_queue[] = "{$php_path} artisan queue:work --queue={$queue} --memory=4072 > /dev/null 2>&1";
+                $array_cmd_queue[] = "{$php_path} artisan queue:work --queue={$queue} --memory=6144 > /dev/null 2>&1";
                 $count_queue++;
             }
         }
