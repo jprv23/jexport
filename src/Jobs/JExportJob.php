@@ -68,7 +68,8 @@ class JExportJob implements ShouldQueue
             (new FastExcel($data))->export($path);
         }else{
             $className = $this->namescape;
-            Excel::store(new $className($data, ...$this->args), $export->file_path, $this->disk);
+            $this->args['data'] = $data;
+            Excel::store(new $className($this->args), $export->file_path, $this->disk);
         }
 
         $export->progress=100;
