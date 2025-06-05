@@ -65,7 +65,7 @@ class JExport{
         $jQueue->start([self::$queue]);
 
         //Agregar a la cola
-        dispatch(new JExportJob($namespace, $args, $export->id, self::$disk))->onQueue(self::$queue);
+        dispatch(new JExportJob($namespace, $args, $export->id, self::$disk, self::$driver))->onQueue(self::$queue);
 
         return $export;
     }

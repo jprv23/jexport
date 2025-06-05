@@ -25,7 +25,7 @@ class JExportJob implements ShouldQueue
         public array $args = [],
         public int $exportId,
         public string $disk = 'public',
-        public string $driver = 'fastexcel',
+        public string $driver = 'laravelexcel',
     ){}
 
     /**
@@ -39,15 +39,14 @@ class JExportJob implements ShouldQueue
         $export->progress=20;
         $export->save();
 
-        $instance = app($this->namescape, $this->args);
-
-        $data = $instance->query(...$this->args);
+        $data = app($this->namescape, $this->args)->query(...$this->args);
 
         if($data->count() == 0){
             $export->progress=100;
             $export->error_message='No hay datos por exportar';
             $export->finished= 1;
             $export->save();
+
             return;
         }
 
@@ -68,7 +67,8 @@ class JExportJob implements ShouldQueue
         if($this->driver == 'fastexcel'){
             (new FastExcel($data))->export($path);
         }else{
-            Excel::store($instance, $export->file_path, $this->disk);
+            $className = $this->namescape;
+            Excel::store(new $className($data, ...$this->args), $export->file_path, $this->disk);
         }
 
         $export->progress=100;
