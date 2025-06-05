@@ -39,14 +39,15 @@ class JExportJob implements ShouldQueue
         $export->progress=20;
         $export->save();
 
-        $data = app($this->namescape, $this->args)->query(...$this->args);
+        $instance = app($this->namescape, $this->args);
+
+        $data = $instance->query(...$this->args);
 
         if($data->count() == 0){
             $export->progress=100;
             $export->error_message='No hay datos por exportar';
             $export->finished= 1;
             $export->save();
-
             return;
         }
 
@@ -67,8 +68,7 @@ class JExportJob implements ShouldQueue
         if($this->driver == 'fastexcel'){
             (new FastExcel($data))->export($path);
         }else{
-            $className = $this->namescape;
-            Excel::store(new $className, $export->file_path, $this->disk);
+            Excel::store($instance, $export->file_path, $this->disk);
         }
 
         $export->progress=100;

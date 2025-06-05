@@ -14,7 +14,7 @@ class JExport{
     public static $directory;
     public static $queue;
     public static $userId;
-    public static $driver = 'fastexcel';
+    public static $driver = 'laravelexcel';
 
     private static function init(){
         self::$disk = config('jexport.disk');
@@ -27,7 +27,10 @@ class JExport{
         return new self;
     }
 
-    public static function setDriver($driver){
+    /**
+     * @param driver laravelexcel|fastexcel
+     */
+    public static function setDriver($driver = "laravelexcel"){
         self::$driver = $driver;
         return new self;
     }
