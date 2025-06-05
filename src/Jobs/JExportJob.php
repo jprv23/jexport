@@ -69,7 +69,7 @@ class JExportJob implements ShouldQueue
         }else{
             $className = $this->namescape;
             $this->args['data'] = $data;
-            Excel::store(new $className($this->args), $export->file_path, $this->disk);
+            Excel::store(new $className(...$this->args), $export->file_path, $this->disk);
         }
 
         $export->progress=100;
