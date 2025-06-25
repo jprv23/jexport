@@ -34,6 +34,8 @@ class JExportJob implements ShouldQueue
     public function handle(): void
     {
         ini_set('memory_limit', config('jexport.memory_limit'));
+        set_time_limit(config('jexport.time_limit', 0)); // safe_mode is off
+        ini_set('max_execution_time', config('jexport.max_execution_time', 600));
 
         $export = Export::find($this->exportId);
         $export->progress=20;
