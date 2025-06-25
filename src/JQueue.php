@@ -25,10 +25,11 @@ class JQueue
 
         $count_queue = 0;
         $array_cmd_queue = [];
+        $max_execution_time = config('jexport.max_execution_time', 600);
         foreach ($queues as $key => $queue) {
             $status_queue = $this->cmd_is_queue($queue);
             if (!$status_queue) {
-                $array_cmd_queue[] = "{$php_path} artisan queue:work --queue={$queue} --memory=6144 > /dev/null 2>&1";
+                $array_cmd_queue[] = "{$php_path} artisan queue:work --queue={$queue} --memory=6144 --timeout={$max_execution_time} > /dev/null 2>&1";
                 $count_queue++;
             }
         }
