@@ -37,7 +37,9 @@ class JExportController extends Controller
 
     public function flush()
     {
-        Export::where('status', true)->update(['status' => false]);
+        Export::where('status', true)
+        ->where('user_id', auth('web')->user()->id)
+        ->update(['status' => false]);
 
         Session::flash('success', 'Eliminado correctamente.');
 
