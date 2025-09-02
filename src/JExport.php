@@ -5,10 +5,12 @@ namespace Jeanp\JExport;
 use Jeanp\JExport\Jobs\JExportJob;
 use Jeanp\JExport\JQueue;
 use App\Models\Export;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
 use Jeanp\JExport\app\Http\Controllers\JExportController;
 
-class JExport{
+class JExport
+{
 
     public static $disk;
     public static $directory;
@@ -16,13 +18,15 @@ class JExport{
     public static $userId;
     public static $driver = 'laravelexcel';
 
-    private static function init(){
+    private static function init()
+    {
         self::$disk = config('jexport.disk');
         self::$directory = config('jexport.directory');
         self::$queue = config('jexport.queue');
     }
 
-    public static function setUserId($id){
+    public static function setUserId($id)
+    {
         self::$userId = $id;
         return new self;
     }
@@ -30,17 +34,19 @@ class JExport{
     /**
      * @param driver laravelexcel|fastexcel
      */
-    public static function setDriver($driver = "laravelexcel"){
+    public static function setDriver($driver = "laravelexcel")
+    {
         self::$driver = $driver;
         return new self;
     }
 
-    public static function dispatch($name = '', $namespace, $args = [], $queue = null){
+    public static function dispatch($name = '', $namespace, $args = [], $queue = null)
+    {
 
         self::init();
 
-        $file_name= self::getFilenameSanitaze($name) . "_" . date('YmdHis') . ".xlsx";
-        $file_path= self::$directory ."/{$file_name}";
+        $file_name = self::getFilenameSanitaze($name) . "_" . date('YmdHis') . ".xlsx";
+        $file_path = self::$directory . "/{$file_name}";
 
 
         $export = new Export();
@@ -49,14 +55,14 @@ class JExport{
         $export->file_path = $file_path;
         $export->progress = 0;
 
-        if(self::$userId){
+        if (self::$userId) {
             $export->user_id = self::$userId;
         }
 
         $export->save();
 
 
-        if($queue){
+        if ($queue) {
             self::$queue = $queue;
         }
 
@@ -70,7 +76,25 @@ class JExport{
         return $export;
     }
 
-    public static function routes(){
+    public static function html($namespace, $args = [])
+    {
+        Excel::store(new $namespace(...$args), 'temp-html-export.html', 'local', \Maatwebsite\Excel\Excel::HTML);
+
+        $html = file_get_contents(storage_path() . "/app/temp-html-export.html");
+
+        unlink(storage_path('app/temp-html-export.html'));
+
+        $temp = explode('<table', $html);
+        $temp = "<table" . $temp[1];
+        $temp = explode('</table>', $temp);
+
+        $html = $temp[0] . "<thead><tr></tr></thead></table>";
+
+        return str_replace('class="column0', 'style="width:13px" width="13px" class="column0', $html);
+    }
+
+    public static function routes()
+    {
         Route::prefix('jexport')->as('jexport.')->controller(JExportController::class)->group(function () {
             Route::get('', 'index')->name('index');
             Route::post('flush', 'flush')->name('flush');
@@ -78,7 +102,18 @@ class JExport{
         });
     }
 
-    private static function getFilenameSanitaze($name) {
+    public static function redirect($url = null)
+    {
+
+        if (!$url) {
+            $url = route('jexport.index');
+        }
+
+        return redirect($url);
+    }
+
+    private static function getFilenameSanitaze($name)
+    {
         $name = iconv('UTF-8', 'ASCII//TRANSLIT', $name);
         $name = preg_replace('/[^a-zA-Z0-9-_.]/', '_', $name);
         $name = strtolower($name);
@@ -86,5 +121,4 @@ class JExport{
 
         return $name;
     }
-
 }
