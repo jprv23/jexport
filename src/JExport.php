@@ -78,6 +78,8 @@ class JExport
 
     public static function html($namespace, $args = [])
     {
+        $args['data'] = app($namespace, $args)->query(...$args);
+
         Excel::store(new $namespace(...$args), 'temp-html-export.html', 'local', \Maatwebsite\Excel\Excel::HTML);
 
         $html = file_get_contents(storage_path() . "/app/temp-html-export.html");
