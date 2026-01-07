@@ -11,7 +11,7 @@ class JQueue
             return 'php';
         }
 
-        return '/usr/local/bin/' .  config('jexport.php', 'ea-php81');
+        return config('jexport.php', '/usr/local/bin/ea-php81');
     }
 
     public function start($queues = [])
