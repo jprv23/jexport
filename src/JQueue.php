@@ -10,7 +10,6 @@ class JQueue
         if ($host == 'localhost') {
             return 'php';
         }
-
         return config('jexport.php', '/usr/local/bin/ea-php81');
     }
 
