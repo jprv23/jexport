@@ -26,7 +26,7 @@ class JExportJob implements ShouldQueue
         public int $exportId,
         public string $disk = 'public',
         public string $driver = 'laravelexcel',
-    ){}
+    ) {}
 
     /**
      * Execute the job.
@@ -37,23 +37,23 @@ class JExportJob implements ShouldQueue
         set_time_limit(config('jexport.time_limit', 0)); // safe_mode is off
         ini_set('max_execution_time', config('jexport.max_execution_time', 600));
 
-        $export = Export::find($this->exportId);
-        $export->progress=20;
+        $export = Export::on(config('jexport.connection'))->where('id', $this->exportId)->first();
+        $export->progress = 20;
         $export->save();
 
         $data = app($this->namescape, $this->args)->query(...$this->args);
 
-        if($data->count() == 0){
-            $export->progress=100;
-            $export->error_message='No hay datos por exportar';
-            $export->finished= 1;
+        if ($data->count() == 0) {
+            $export->progress = 100;
+            $export->error_message = 'No hay datos por exportar';
+            $export->finished = 1;
             $export->save();
 
             return;
         }
 
         $export->rows_total = $data->count();
-        $export->progress=50;
+        $export->progress = 50;
         $export->save();
 
         //Ejectutar exportación con la data
@@ -66,16 +66,16 @@ class JExportJob implements ShouldQueue
             File::makeDirectory($directory, 0755, true);
         }
 
-        if($this->driver == 'fastexcel'){
+        if ($this->driver == 'fastexcel') {
             (new FastExcel($data))->export($path);
-        }else{
+        } else {
             $className = $this->namescape;
             $this->args['data'] = $data;
             Excel::store(new $className(...$this->args), $export->file_path, $this->disk);
         }
 
-        $export->progress=100;
-        $export->finished= 1;
+        $export->progress = 100;
+        $export->finished = 1;
         $export->save();
     }
 
@@ -84,7 +84,7 @@ class JExportJob implements ShouldQueue
      */
     public function failed(Throwable $exception): void
     {
-        $export = Export::find($this->exportId);
+        $export = Export::on(config('jexport.connection'))->where('id', $this->exportId)->first();
         $export->error_message = $exception->getMessage();
         $export->finished = 1;
         $export->save();

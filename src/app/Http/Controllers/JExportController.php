@@ -11,11 +11,15 @@ class JExportController extends Controller
 {
     public function index()
     {
-        if(!request()->ajax()){
+        if (!request()->ajax()) {
             return view('jexport.index');
         }
 
-        $exports = Export::active()->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate(25);
+        $exports = Export::on(config('jexport.connection'))
+            ->where('status', true)
+            ->where('user_id', auth()->user()->id)
+            ->orderByDesc('id')
+            ->paginate(25);
 
         return response()->json([
             'table' => view('jexport.table', compact('exports'))->render(),
@@ -26,7 +30,7 @@ class JExportController extends Controller
     public function destroy($id)
     {
 
-        $export = Export::findOrFail($id);
+        $export = Export::on(config('jexport.connection'))->where('id', $id)->first();
         $export->status = false;
         $export->save();
 
@@ -37,9 +41,10 @@ class JExportController extends Controller
 
     public function flush()
     {
-        Export::where('status', true)
-        ->where('user_id', auth('web')->user()->id)
-        ->update(['status' => false]);
+        Export::on(config('jexport.connection'))
+            ->where('status', true)
+            ->where('user_id', auth('web')->user()->id)
+            ->update(['status' => false]);
 
         Session::flash('success', 'Eliminado correctamente.');
 
